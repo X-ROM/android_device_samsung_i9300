@@ -1,5 +1,5 @@
 # Specify phone tech before including full_phone
-$(call inherit-product, vendor/cm/config/gsm.mk)
+$(call inherit-product, vendor/liquid/config/common_gsm.mk)
 
 # Release name
 PRODUCT_RELEASE_NAME := i9300
@@ -8,7 +8,7 @@ PRODUCT_RELEASE_NAME := i9300
 TARGET_BOOTANIMATION_NAME := vertical-720x1280
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/liquid/config/common_phone.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/samsung/i9300/full_i9300.mk)
