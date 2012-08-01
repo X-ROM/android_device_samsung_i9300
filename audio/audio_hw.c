@@ -599,10 +599,6 @@ static void select_output_device(struct m0_audio_device *adev)
             set_bigroute_by_array(adev->mixer, voicecall_default_disable, 1);
         }
 
-<<<<<<< HEAD
-        if (headset_on || headphone_on) {
-            ALOGD("%s: set bigroute: headset_input", __func__);
-=======
         if (speaker_on || earpiece_on || headphone_on) {
             ALOGD("%s: set voicecall route: default_input", __func__);
             set_bigroute_by_array(adev->mixer, default_input, 1);
@@ -613,7 +609,6 @@ static void select_output_device(struct m0_audio_device *adev)
 
         if (headset_on) {
             ALOGD("%s: set voicecall route: headset_input", __func__);
->>>>>>> b7a5a37... audio: use back-mic for calls on headphone
             set_bigroute_by_array(adev->mixer, headset_input, 1);
         }
 
