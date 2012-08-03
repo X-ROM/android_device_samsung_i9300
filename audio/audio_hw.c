@@ -88,8 +88,9 @@ struct m0_audio_device {
     struct m0_dev_cfg *dev_cfgs;
     int num_dev_cfgs;
     struct mixer *mixer;
+    struct mixer_ctls mixer_ctls;
     audio_mode_t mode;
-	int active_devices;
+    int active_devices;
     int devices;
     struct pcm *pcm_modem_dl;
     struct pcm *pcm_modem_ul;
@@ -378,13 +379,16 @@ err_open_dl:
 static void end_call(struct m0_audio_device *adev)
 {
     ALOGE("Closing modem PCMs");
-
     pcm_stop(adev->pcm_modem_dl);
     pcm_stop(adev->pcm_modem_ul);
     pcm_close(adev->pcm_modem_dl);
     pcm_close(adev->pcm_modem_ul);
     adev->pcm_modem_dl = NULL;
     adev->pcm_modem_ul = NULL;
+
+    /* re-enable +30db boost on mics */
+    mixer_ctl_set_value(adev->mixer_ctls.mixinl_in1l_volume, 0, 1);
+    mixer_ctl_set_value(adev->mixer_ctls.mixinl_in2l_volume, 0, 1);
 }
 
 static void set_eq_filter(struct m0_audio_device *adev)
@@ -592,10 +596,10 @@ static void select_output_device(struct m0_audio_device *adev)
         }
 
         if (headset_on || headphone_on || speaker_on || earpiece_on) {
-            ALOGD("%s: set bigroute: voicecall_input_default", __func__);
+            ALOGD("%s: set voicecall route: voicecall_default", __func__);
             set_bigroute_by_array(adev->mixer, voicecall_default, 1);
         } else {
-            ALOGD("%s: set bigroute: voicecall_input_default_disable", __func__);
+            ALOGD("%s: set voicecall route: voicecall_default_disable", __func__);
             set_bigroute_by_array(adev->mixer, voicecall_default_disable, 1);
         }
 
@@ -610,17 +614,24 @@ static void select_output_device(struct m0_audio_device *adev)
         if (headset_on) {
             ALOGD("%s: set voicecall route: headset_input", __func__);
             set_bigroute_by_array(adev->mixer, headset_input, 1);
+        } else {
+            ALOGD("%s: set voicecall route: headset_input_disable", __func__);
+            set_bigroute_by_array(adev->mixer, headset_input_disable, 1);
         }
 
         if (bt_on) {
             // bt uses a different port (PORT_BT) for playback, reopen the pcms
             end_call(adev);
             start_call(adev);
-            ALOGD("%s: set bigroute: bt_input", __func__);
+            ALOGD("%s: set voicecall route: bt_input", __func__);
             set_bigroute_by_array(adev->mixer, bt_input, 1);
-            ALOGD("%s: set bigroute: bt_output", __func__);
+            ALOGD("%s: set voicecall route: bt_output", __func__);
             set_bigroute_by_array(adev->mixer, bt_output, 1);
+        } else {
+            ALOGD("%s: set voicecall route: bt_disable", __func__);
+            set_bigroute_by_array(adev->mixer, bt_disable, 1);
         }
+
         set_incall_device(adev);
     }
 }
@@ -2972,6 +2983,10 @@ static int adev_open(const hw_module_t* module, const char* name,
         ALOGE("Unable to open the mixer, aborting.");
         return -EINVAL;
     }
+
+    /* +30db boost for mics */
+    adev->mixer_ctls.mixinl_in1l_volume = mixer_get_ctl_by_name(adev->mixer, "MIXINL IN1L Volume");
+    adev->mixer_ctls.mixinl_in2l_volume = mixer_get_ctl_by_name(adev->mixer, "MIXINL IN2L Volume");
 
 	ret = adev_config_parse(adev);
 	if (ret != 0)
