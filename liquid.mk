@@ -22,3 +22,9 @@ PRODUCT_MANUFACTURER := samsung
 
 # Set build fingerprint / ID / Product Name ect.
 PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=m0xx TARGET_DEVICE=m0 BUILD_FINGERPRINT="samsung/m0xx/m0:4.0.4/IMM76D/I9300XXALE8:user/release-keys" PRIVATE_BUILD_DESC="m0xx-user 4.0.4 IMM76D I9300XXALE8 release-keys"
+
+# media
+PRODUCT_COPY_FILES += \
+    vendor/liquid/prebuilt/common/media/xhdpi/bootanimation.zip:system/media/bootanimation.zip
+
+
