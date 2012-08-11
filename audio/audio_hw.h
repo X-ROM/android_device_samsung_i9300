@@ -195,7 +195,6 @@ struct route_setting bt_output[] = {
     { .ctl_name = "DAC2 Volume", .intval = 96, },
     { .ctl_name = "AIF2ADC Volume", .intval = 96, },
     { .ctl_name = "Speaker Mixer Volume", .intval = 1, },
-    { .ctl_name = "Speaker Volume", .intval = 0, },
     { .ctl_name = "MIXINL IN2L Volume", .intval = 1, },
     { .ctl_name = "IN1L Volume", .intval = 25, },
     { .ctl_name = "IN1R Volume", .intval = 25, },

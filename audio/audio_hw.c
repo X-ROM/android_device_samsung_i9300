@@ -406,7 +406,7 @@ void audio_set_wb_amr_callback(void *data, int enable)
         /* reopen the modem PCMs at the new rate */
         if (adev->in_call) {
             end_call(adev);
-            set_eq_filter(adev);
+            select_output_device(adev);
             start_call(adev);
         }
     }
@@ -568,7 +568,7 @@ static void select_output_device(struct m0_audio_device *adev)
 
     select_devices(adev);
 
-	set_eq_filter(adev);
+    set_eq_filter(adev);
 
     if (adev->mode == AUDIO_MODE_IN_CALL) {
         if (!bt_on) {
@@ -2987,9 +2987,9 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->mixer_ctls.mixinl_in1l_volume = mixer_get_ctl_by_name(adev->mixer, "MIXINL IN1L Volume");
     adev->mixer_ctls.mixinl_in2l_volume = mixer_get_ctl_by_name(adev->mixer, "MIXINL IN2L Volume");
 
-	ret = adev_config_parse(adev);
-	if (ret != 0)
-		goto err_mixer;
+    ret = adev_config_parse(adev);
+    if (ret != 0)
+        goto err_mixer;
 
     /* Set the default route before the PCM stream is opened */
     pthread_mutex_lock(&adev->lock);

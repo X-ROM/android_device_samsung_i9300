@@ -62,11 +62,10 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=15
+    wifi.supplicant_scan_interval=180
 
 # Gps
 PRODUCT_COPY_FILES += \
-    device/samsung/i9300/configs/gps.conf:system/etc/gps.conf \
     device/samsung/i9300/configs/gps.xml:system/etc/gps.xml
 
 # Packages
@@ -216,11 +215,10 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
-
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
 $(call inherit-product, hardware/samsung/exynos4x12.mk)
+$(call inherit-product, vendor/liquid/config/nfc_enhanced.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/i9300/i9300-vendor.mk)
