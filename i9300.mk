@@ -82,8 +82,7 @@ PRODUCT_PACKAGES := \
     macloader \
     SamsungServiceMode \
     tinymix \
-    Torch \
-    TVOutDummy
+    Torch
 
 # HAL
 PRODUCT_PACKAGES += \
