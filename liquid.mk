@@ -16,12 +16,5 @@ PRODUCT_MANUFACTURER := Samsung
 PRODUCT_PROPERTY_OVERRIDES += ro.buildzipid=liquid.i9300.$(shell date +%m%d%y).$(shell date +%H%M%S)
 
 # overrides
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_NUMBER=I9300XXALE8 \
-    PRODUCT_NAME=m0xx \
-    TARGET_DEVICE=m0 \
-    TARGET_BUILD_TYPE=user \
-    BUILD_VERSION_TAGS=release-keys \
-    PRIVATE_BUILD_DESC="m0xx-user 4.0.4 IMM76D I9300XXALE8 release-keys" \
-    BUILD_FINGERPRINT="samsung/m0xx/m0:4.0.4/IMM76D/I9300XXALE8:user/release-keys"
+PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=m0xx TARGET_DEVICE=m0 BUILD_FINGERPRINT="samsung/m0xx/m0:4.0.4/IMM76D/I9300XXALE8:user/release-keys" PRIVATE_BUILD_DESC="m0xx-user 4.0.4 IMM76D I9300XXALE8 release-keys"
 
