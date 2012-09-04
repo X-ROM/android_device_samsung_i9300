@@ -66,6 +66,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Gps
 PRODUCT_COPY_FILES += \
+    device/samsung/i9300/configs/gps.conf:system/etc/gps.conf \
     device/samsung/i9300/configs/gps.xml:system/etc/gps.xml
 
 # Packages
@@ -218,6 +219,5 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
 $(call inherit-product, hardware/samsung/exynos4x12.mk)
-$(call inherit-product, vendor/liquid/config/nfc_enhanced.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/i9300/i9300-vendor.mk)
