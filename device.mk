@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2012 The CyanogenMod Project
+# Copyright (C) 2012 The LiquidSmooth Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,9 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := $(call my-dir)
+# overlay
+DEVICE_PACKAGE_OVERLAYS += device/samsung/i9300/overlay
 
-ifeq ($(TARGET_DEVICE),i9300)
+# vendor
+$(call inherit-product-if-exists, vendor/samsung/i9300/i9300-vendor.mk)
 
-include $(call all-makefiles-under,$(LOCAL_PATH))
-
-endif
