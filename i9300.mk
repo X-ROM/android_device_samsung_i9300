@@ -1,6 +1,5 @@
 #
 # Copyright (C) 2012 The CyanogenMod Project
-# Copyright (C) 2012 The LiquidSmooth Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,54 +14,72 @@
 # limitations under the License.
 #
 
-# language
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-
-# local
 LOCAL_PATH := device/samsung/i9300
 
-# density
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
+# The gps config appropriate for this device
+$(call inherit-product, device/common/gps/gps_us_supl.mk)
+
+# This device is xhdpi.  However the platform doesn't
+# currently contain all of the bitmaps at xhdpi density so
+# we do this little trick to fall back to the hdpi version
+# if the xhdpi doesn't exist.
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-# include
+# Init files
 PRODUCT_COPY_FILES := \
-    $(LOCAL_PATH)/lpm.rc:include/lpm.rc \
-    $(LOCAL_PATH)/init.bt.rc:include/init.bt.rc \
-    $(LOCAL_PATH)/init.trace.rc:include/init.trace.rc \
-    $(LOCAL_PATH)/fstab.smdk4x12:include/fstab.smdk4x12 \
-    $(LOCAL_PATH)/init.smdk4x12.rc:include/init.smdk4x12.rc \
-    $(LOCAL_PATH)/ueventd.smdk4x12.rc:include/ueventd.smdk4x12.rc \
-    $(LOCAL_PATH)/init.smdk4x12.usb.rc:include/init.smdk4x12.usb.rc
+    $(LOCAL_PATH)/fstab.smdk4x12:root/fstab.smdk4x12 \
+    $(LOCAL_PATH)/init.bt.rc:root/init.bt.rc \
+    $(LOCAL_PATH)/init.smdk4x12.rc:root/init.smdk4x12.rc \
+    $(LOCAL_PATH)/init.smdk4x12.usb.rc:root/init.smdk4x12.usb.rc \
+    $(LOCAL_PATH)/lpm.rc:root/lpm.rc \
+    $(LOCAL_PATH)/init.trace.rc:root/init.trace.rc \
+    $(LOCAL_PATH)/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
+    $(LOCAL_PATH)/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc
 
-# configs
+# Camera FW
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/nfcee_access.xml:system/etc/nfcee_access.xml \
-    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+    $(LOCAL_PATH)/80cfw:system/etc/init.d/80cfw
 
-# audio
+# Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/m0 \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
 
-# storage
+# Vold and Storage
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab
 
-# camera
+# Bluetooth configuration files
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/include/80cfw:system/etc/init.d/80cfw
+    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
 
-# gps
+# Wifi
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    wifi.interface=wlan0 \
+    wifi.supplicant_scan_interval=180
+
+# Gps
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
     $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml
 
-# packages
+# Packages
 PRODUCT_PACKAGES := \
     audio.a2dp.default \
     audio.primary.smdk4x12 \
     audio.usb.default \
     camera.exynos4 \
+    Camera \
     com.android.future.usb.accessory \
     GalaxyS3Settings \
     libsecril-client \
@@ -70,31 +87,45 @@ PRODUCT_PACKAGES := \
     libsync \
     macloader \
     SamsungServiceMode \
-    tinymix
+    tinymix \
+    Torch
 
-# mfc
+# HAL
 PRODUCT_PACKAGES += \
-    libsecmfcdecapi \
-    libsecmfcencapi
+    nfc.exynos4 \
+    lights.exynos4
 
-# nfc
+# NFC
 PRODUCT_PACKAGES += \
     libnfc \
     libnfc_jni \
     Nfc \
     Tag
 
-# prebuilt
 PRODUCT_COPY_FILES += \
     packages/apps/Nfc/migrate_nfc.txt:system/etc/updatecmds/migrate_nfc.txt \
+    frameworks/base/nfc-extras/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
 
-# sensors
-PRODUCT_PACKAGES += \
-    nfc.exynos4 \
-    lights.exynos4
+# NFCEE access control
+ifeq ($(TARGET_BUILD_VARIANT),user)
+    NFCEE_ACCESS_PATH := $(LOCAL_PATH)/nfcee_access.xml
+else
+    NFCEE_ACCESS_PATH := $(LOCAL_PATH)/nfcee_access_debug.xml
+endif
 
-# omx
+PRODUCT_COPY_FILES += \
+    $(NFCEE_ACCESS_PATH):system/etc/nfcee_access.xml
+
+PRODUCT_PACKAGES += \
+    com.android.nfc_extras
+
+# MFC API
+PRODUCT_PACKAGES += \
+    libsecmfcdecapi \
+    libsecmfcencapi
+
+# OMX
 PRODUCT_PACKAGES += \
     libstagefrighthw \
     libSEC_OMX_Resourcemanager \
@@ -104,19 +135,38 @@ PRODUCT_PACKAGES += \
     libOMX.SEC.WMV.Decoder \
     libOMX.SEC.AVC.Encoder \
     libOMX.SEC.M4V.Encoder
+#   libOMX.SEC.VP8.Decoder
 
-# media
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml
 
-# filesystem
+# RIL
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.ril_class=Smdk4210RIL \
+    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
+    ro.ril.hsxpa=1 \
+    ro.ril.gprsclass=10
+
+# Filesystem management tools
 PRODUCT_PACKAGES += \
     static_busybox \
     make_ext4fs \
     setup_fs
 
-# hardware
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+    Galaxy4 \
+    HoloSpiralWallpaper \
+    LiveWallpapers \
+    LiveWallpapersPicker \
+    MagicSmokeWallpapers \
+    NoiseField \
+    PhaseBeam \
+    VisualizationWallpapers \
+    librs_jni
+
+# These are the hardware-specific features
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
@@ -140,33 +190,25 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
+
+# Feature live wallpaper
+PRODUCT_COPY_FILES += \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
-# override
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.ril.hsxpa=1 \
-    ro.ril.gprsclass=10 \
-    wifi.interface=wlan0 \
     ro.opengles.version=131072 \
-    hwui.render_dirty_regions=false \
-    wifi.supplicant_scan_interval=180 \
-    ro.telephony.ril_class=Smdk4210RIL \
-    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
+    hwui.render_dirty_regions=false
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-# usb
+# Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
 
-# exynos
-$(call inherit-product, hardware/samsung/exynos4x12.mk)
-
-# specific
+# Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
 TARGET_OMX_PATH := hardware/samsung/exynos/multimedia/openmax
+$(call inherit-product, hardware/samsung/exynos4x12.mk)
 
-# vendor
 $(call inherit-product-if-exists, vendor/samsung/i9300/i9300-vendor.mk)
-

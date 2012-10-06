@@ -1,6 +1,5 @@
 #
 # Copyright (C) 2012 The CyanogenMod Project
-# Copyright (C) 2012 The LiquidSmooth Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,16 +14,13 @@
 # limitations under the License.
 #
 
-# generic
+# This variable is set first, so it can be overridden
+# by BoardConfigVendor.mk
 USE_CAMERA_STUB := true
+BOARD_USES_GENERIC_AUDIO := false
 
-# inherit
--include vendor/samsung/i9300/BoardConfigVendor.mk
+TARGET_BOOTANIMATION_PRELOAD := true
 
-# assert
-TARGET_OTA_ASSERT_DEVICE := m0,i9300,GT-I9300
-
-# platform
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_SMP := true
@@ -43,24 +39,27 @@ COMMON_GLOBAL_CFLAGS += -DSURFACEFLINGER_FORCE_SCREEN_RELEASE
 COMMON_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK
 endif
 
+TARGET_BOARD_PLATFORM := exynos4
+TARGET_SOC := exynos4x12
+TARGET_BOOTLOADER_BOARD_NAME := smdk4x12
+
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
-BOARD_USES_GENERIC_AUDIO := false
-TARGET_BOOTANIMATION_PRELOAD := true
+TARGET_PROVIDES_INIT := true
+TARGET_PROVIDES_INIT_TARGET_RC := true
+TARGET_RECOVERY_INITRC := device/samsung/i9300/recovery.rc
 
-TARGET_SOC := exynos4x12
-TARGET_BOARD_PLATFORM := exynos4
-TARGET_BOOTLOADER_BOARD_NAME := smdk4x12
+TARGET_SPECIFIC_HEADER_PATH := device/samsung/i9300/overlay/include
 
-# kernel
+# Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/smdk4412
 TARGET_KERNEL_CONFIG := cyanogenmod_i9300_defconfig
 BOARD_KERNEL_CMDLINE := "console=ttySAC2,115200"
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_PAGESIZE := 2048
 
-# filesystem
+# Filesystem
 BOARD_NAND_PAGE_SIZE := 4096
 BOARD_NAND_SPARE_SIZE := 128
 BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
@@ -70,34 +69,31 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 12381585408
 BOARD_FLASH_BLOCK_SIZE := 4096
 TARGET_USERIMAGES_USE_EXT4 := true
 
-# graphics
+# Graphics
+BOARD_EGL_CFG := device/samsung/i9300/configs/egl.cfg
 USE_OPENGL_RENDERER := true
 BOARD_USES_SKIAHWJPEG := true
 COMMON_GLOBAL_CFLAGS += -DSEC_HWJPEG_G2D
-BOARD_EGL_CFG := device/samsung/i9300/configs/egl.cfg
 
-# webkit
+# Enable WEBGL in WebKit
 ENABLE_WEBGL := true
 
-# audio
+# Audio
 BOARD_USES_LIBMEDIA_WITH_AUDIOPARAMETER := true
 
-# display
+# HWComposer
 BOARD_USES_HWCOMPOSER := true
 
-# tvout
+# TVOut & HDMI
 BOARD_USE_SECTVOUT := true
 BOARD_USES_SKTEXTBOX := true
 
-# data
-BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
-
-# camera
-BOARD_USES_PROPRIETARY_LIBFIMC := true
+# Camera
 BOARD_USES_PROPRIETARY_LIBCAMERA := true
+BOARD_USES_PROPRIETARY_LIBFIMC := true
 COMMON_GLOBAL_CFLAGS += -DSAMSUNG_CAMERA_HARDWARE
 
-# omx
+# OMX
 BOARD_HAVE_CODEC_SUPPORT := SAMSUNG_CODEC_SUPPORT
 COMMON_GLOBAL_CFLAGS += -DSAMSUNG_CODEC_SUPPORT
 BOARD_USES_PROPRIETARY_OMX := SAMSUNG
@@ -109,7 +105,10 @@ BOARD_USES_MFC_FPS := true
 BOARD_USE_S3D_SUPPORT := true
 BOARD_USE_CSC_FIMC := false
 
-# wifi
+# RIL
+BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
+
+# Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
 BOARD_WLAN_DEVICE_REV            := bcm4334
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
@@ -127,22 +126,30 @@ WIFI_DRIVER_MODULE_ARG           := "firmware_path=/system/etc/wifi/bcmdhd_sta.b
 WIFI_BAND                        := 802_11_ABG
 BOARD_HAVE_SAMSUNG_WIFI          := true
 
-# bluetooth
+# Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_HAVE_SAMSUNG_BLUETOOTH := true
 
-# storage
-BOARD_UMS_LUNFILE := "/sys/class/android_usb/android0/f_mass_storage/lun0/file"
+# Vold
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/s3c-usbgadget/gadget/lun%d/file"
 
-# filesystem
+# Recovery
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/i9300/recovery/recovery_keys.c
+BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/i9300/recovery/graphics.c
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
+BOARD_UMS_LUNFILE := "/sys/class/android_usb/android0/f_mass_storage/lun0/file"
 BOARD_USES_MMCUTILS := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_MISC_PARTITION := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 
-# charging
-BOARD_BATTERY_DEVICE_NAME := "battery"
+# Charging mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/batt_lp_charging
+BOARD_BATTERY_DEVICE_NAME := "battery"
 
+# assert
+TARGET_OTA_ASSERT_DEVICE := m0,i9300,GT-I9300
+
+# inherit from the proprietary version
+-include vendor/samsung/i9300/BoardConfigVendor.mk
