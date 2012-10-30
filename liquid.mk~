@@ -10,6 +10,9 @@ $(call inherit-product, vendor/liquid/config/common_gsm.mk)
 # phone
 $(call inherit-product, vendor/liquid/config/common_phone.mk)
 
+# nfc
+$(call inherit-product, vendor/liquid/config/nfc_enhanced.mk)
+
 # products
 PRODUCT_DEVICE := i9300
 PRODUCT_BRAND := Samsung
