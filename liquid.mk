@@ -7,9 +7,6 @@ $(call inherit-product-if-exists, device/samsung/i9300/full_i9300.mk)
 # gsm
 $(call inherit-product, vendor/liquid/config/common_gsm.mk)
 
-# nfc
-$(call inherit-product, vendor/liquid/config/nfc_enhanced.mk)
-
 # phone
 $(call inherit-product, vendor/liquid/config/common_phone.mk)
 
