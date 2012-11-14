@@ -81,8 +81,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     com.android.nfc_extras
 
-$(call inherit-product, vendor/liquid/config/permissions/com.liquidsmooth.nfc.enhanced.xml)
-
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=Smdk4210RIL \
