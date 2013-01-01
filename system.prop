@@ -2,13 +2,17 @@ windowsmgr.max_events_per_sec=275
 #
 # system.prop for smdk4x12
 #
-
+## cannot take spaces
+dalvik.vm.dexopt-data-only=1
 rild.libpath=/system/lib/libsec-ril.so
 rild.libargs=-d /dev/ttyS0
 ro.sf.lcd_density=320
 ro.lcd_min_brightness=20
 
-# Dalvik heapsize
-dalvik.vm.heapsize=256m
-dalvik.vm.heapstartsize=16m
-dalvik.vm.heapgrowthlimit=128m
+# Fields For VM Heapsize
+dalvik.vm.heapsize=512m
+dalvik.vm.heapmaxfree=8m
+dalvik.vm.heapminfree=512k
+dalvik.vm.heapstartsize=32m
+dalvik.vm.heapgrowthlimit=256m
+dalvik.vm.heaputilization=0.75
