@@ -2,7 +2,6 @@ windowsmgr.max_events_per_sec=275
 #
 # system.prop for smdk4x12
 #
-## cannot take spaces
 dalvik.vm.dexopt-data-only=1
 rild.libpath=/system/lib/libsec-ril.so
 rild.libargs=-d /dev/ttyS0
