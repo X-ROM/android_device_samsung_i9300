@@ -25,6 +25,8 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/i9300/bluetooth
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/smdk4412
 TARGET_KERNEL_CONFIG := cyanogenmod_i9300_defconfig
+TARGET_GCC_VERSION := 4.6
+TARGET_USE_O2 := true
 
 # assert
 TARGET_OTA_ASSERT_DEVICE := m0,i9300,GT-I9300
