@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2012 The CyanogenMod Project
+# Copyright (C) 2012 The LiquidSmooth Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,10 +23,6 @@ LOCAL_PATH := device/samsung/i9300
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# This device is xhdpi.  However the platform doesn't
-# currently contain all of the bitmaps at xhdpi density so
-# we do this little trick to fall back to the hdpi version
-# if the xhdpi doesn't exist.
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
@@ -52,11 +49,9 @@ PRODUCT_PACKAGES += \
     libsecril-client \
     libsecril-client-sap
 
-#    SamsungServiceMode
-
 # NFC
 PRODUCT_PACKAGES += \
-	nfc.exynos4 \
+    nfc.exynos4 \
     libnfc \
     libnfc_jni \
     Nfc \
@@ -82,14 +77,14 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.ril_class=SamsungExynos4RIL \
-    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
     ro.ril.hsxpa=1 \
-    ro.ril.gprsclass=10
+    ro.ril.gprsclass=10 \
+    ro.telephony.ril_class=SamsungExynos4RIL \
+    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
 $(call inherit-product-if-exists, vendor/samsung/i9300/i9300-vendor.mk)

@@ -2,11 +2,13 @@ windowsmgr.max_events_per_sec=275
 #
 # system.prop for smdk4x12
 #
-dalvik.vm.dexopt-data-only=1
-rild.libpath=/system/lib/libsec-ril.so
+## cannot take spaces
 rild.libargs=-d /dev/ttyS0
-ro.sf.lcd_density=320
+
+# Fields For Custom RIL
+rild.libpath=/system/lib/libsec-ril.so
 ro.lcd_min_brightness=20
+ro.sf.lcd_density=320
 
 # Fields For VM Heapsize
 dalvik.vm.heapsize=512m
