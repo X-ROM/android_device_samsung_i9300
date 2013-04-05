@@ -1,19 +1,9 @@
 windowsmgr.max_events_per_sec=275
 #
-# system.prop for smdk4x12
+# system.prop for i9300
 #
 ## cannot take spaces
 rild.libargs=-d /dev/ttyS0
-
-# Fields For Custom RIL
 rild.libpath=/system/lib/libsec-ril.so
 ro.lcd_min_brightness=20
 ro.sf.lcd_density=320
-
-# Fields For VM Heapsize
-dalvik.vm.heapsize=512m
-dalvik.vm.heapmaxfree=8m
-dalvik.vm.heapminfree=512k
-dalvik.vm.heapstartsize=32m
-dalvik.vm.heapgrowthlimit=256m
-dalvik.vm.heaputilization=0.75

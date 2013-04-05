@@ -40,7 +40,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.buildzipid=liquid.i9300.$(shell date +%m%d%y).$
 
 # overrides
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_NUMBER=533553 \
+    BUILD_NUMBER=I9300XXDLIB \
     PRODUCT_NAME=m0xx \
     TARGET_DEVICE=m0 \
     TARGET_BUILD_TYPE=user \
