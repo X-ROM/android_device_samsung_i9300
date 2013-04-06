@@ -30,6 +30,9 @@ $(call inherit-product, vendor/liquid/config/common_gsm.mk)
 # phone
 $(call inherit-product, vendor/liquid/config/common_phone.mk)
 
+# overlay for international dictionaries
+PRODUCT_PACKAGE_OVERLAYS += vendor/liquid/overlay/all_dictionaries
+
 # products
 PRODUCT_DEVICE := i9300
 PRODUCT_BRAND := Samsung
