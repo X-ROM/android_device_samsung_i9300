@@ -3,7 +3,8 @@ windowsmgr.max_events_per_sec=275
 # system.prop for i9300
 #
 ## cannot take spaces
-rild.libargs=-d /dev/ttyS0
+dalvik.vm.dexopt-data-only=1
 rild.libpath=/system/lib/libsec-ril.so
+rild.libargs=-d /dev/ttyS0
 ro.lcd_min_brightness=20
 ro.sf.lcd_density=320
