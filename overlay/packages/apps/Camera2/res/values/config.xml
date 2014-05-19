@@ -18,7 +18,6 @@
 -->
 
 <resources>
-    <bool name="cancelAutoFocusOnPreviewStopped">false</bool>
     <!-- Use ZSL mode for Qualcomm cameras -->
     <bool name="enableZSL">true</bool>
 </resources>
